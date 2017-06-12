@@ -2,6 +2,10 @@
 
 ---
 
+### Disclaimer: This is by no means the most efficent or best way to solve this challenge. This is simply my though process and what worked for me.
+
+---
+
 The challenge is to decrypt the flag from an image.
 
 ![flag](img/flag.png)
