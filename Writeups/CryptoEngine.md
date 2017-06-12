@@ -8,44 +8,44 @@
 
 The challenge is to decrypt the flag from an image.
 
-![flag](img/flag.png)
+![flag](img/CryptoEngine/flag.png)
 
 There is also a tool to encode any entered text
 
-![text_entry](img/text_entry.png)
+![text_entry](img/CryptoEngine/text_entry.png)
 
 When you submit this box a new page is displayed with a single image. Lets try this with the string "test".
 
 encrypt(test) =
-![encrypted_test](img/encrypt_test.png)
+![encrypted_test](img/CryptoEngine/encrypt_test.png)
 
 Cool! Now lets test with simple strings, try "a"
 
 encrypt(a) =
-![encrypted_a](img/encrypt_a.png)
+![encrypted_a](img/CryptoEngine/encrypt_a.png)
 
 This is curious... It seems to be too short, lets try other lengths.
 
 encrypt(aa) =
-![encrypted_aa](img/encrypt_a.png)
+![encrypted_aa](img/CryptoEngine/encrypt_a.png)
 
 encrypt(aaa) =
-![encrypted_aaa](img/encrypt_aaa.png)
+![encrypted_aaa](img/CryptoEngine/encrypt_aaa.png)
 
 Got it! The minimum length seems to be three characters. Lets keep going.
 
 encrypt(aaaa) =
-![encrypted_aaaa](img/encrypt_aaaa.png)
+![encrypted_aaaa](img/CryptoEngine/encrypt_aaaa.png)
 
 Okay... we have some characters added to it, and examining the RGB we have the same color.
 
 encrypt(aaaaa) =
-![encrypted_aaaaa](img/encrypt_aaaaa.png)
+![encrypted_aaaaa](img/CryptoEngine/encrypt_aaaaa.png)
 
 We have some more characters but they seem to be cut off, again, the same color.
 
 encrypt(aaaaaa) =
-![encrypted_aaaaaa](img/encrypt_aaaaaa.png)
+![encrypted_aaaaaa](img/CryptoEngine/encrypt_aaaaaa.png)
 
 Very interesting... now we have two squares and no text. From this you should be able to conclude that every three characters equates to a square and any remainder contributes to some text.
 
@@ -53,7 +53,7 @@ It's curious... three chars to a square, and three colors make up that square, R
 
 Let's look at the individual color values for these squares. Lucky for me, my mac has a built in tool "Digital Color Meter" which happily gives me the RGB of whatever pixel my mouse is over.
 
-![capture_tool](img/capture_tool.png)
+![capture_tool](img/CryptoEngine/capture_tool.png)
 
 Lets look some RGB values for different codes.
 
@@ -186,37 +186,37 @@ with open('hashes.pickle') as f:  # Python 3: open(..., 'rb')
 
 Just one problem here....
 
-![Result of first try](img/first_try_output.png)
+![Result of first try](img/CryptoEngine/first_try_output.png)
 
 The interesting part here is that we got the first 3 right, but why if the rest garbage? To the keen observer, you may have noticed the encrypted version of "aaaaaa" above.
 
 encrypt(aaaaaa) =
-![encrypted_aaaaaa](img/encrypt_aaaaaa.png)
+![encrypted_aaaaaa](img/CryptoEngine/encrypt_aaaaaa.png)
 
 Even though the first and second square are both "aaa", they have different colors. Lets go crazy and see if we find a pattern.
 
 encrypt(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) =
-![encrypted_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa](img/encrypt_lots_of_a.png)
+![encrypted_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa](img/CryptoEngine/encrypt_lots_of_a.png)
 
 There seems to be some repetition starting at the 9th square, lets test more to confirm.
 
 encrypt(zzzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) =
-![encrypted_zzzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa](img/encrypt_z_then_a.png)
+![encrypted_zzzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa](img/CryptoEngine/encrypt_z_then_a.png)
 
 Oddly, there is still repetition between the first and ninth square, even though the first and ninth square are made up of different letters. (zzz for the first and aaa for the ninth)
 
 Rather than going down this rabbit hole of finding a pattern here, lets test how each squares values effect the others. We'll start without "aaaaaa" encryption. and compare it to "zzzaaa"
 
 encrypt(aaaaaa) =
-![encrypted_aaaaaa](img/encrypt_aaaaaa.png)
+![encrypted_aaaaaa](img/CryptoEngine/encrypt_aaaaaa.png)
 = [83,81,80], [86, 50,48]
 
 encrypt(zzzaaa) =
-![encrypted_zzzaaa](img/encrypt_zzzaaa.png)
+![encrypted_zzzaaa](img/CryptoEngine/encrypt_zzzaaa.png)
 = [72,74,75], [86,41,43]
 
 encrypt(aaazzz) =
-![encrypted_aaazzz](img/encrypt_aaazzz.png)
+![encrypted_aaazzz](img/CryptoEngine/encrypt_aaazzz.png)
 = [83,81,80], [77, 41,43]
 
 Changing the fist clearly changes the second square, but changing the second has no effect on the first.
@@ -308,21 +308,21 @@ for square in range(12):
 
 GOT IT! Now's the time to jump on Slack and tell your friends you really got something!
 
-![final_script_output](img/final_script_output.png)
+![final_script_output](img/CryptoEngine/final_script_output.png)
 
 We're so close at this point. There's one final part. The last two characters srill need to be figured out. Remember those? The two that are encoded as ascii characters in the image?
 
 This last bit isn't bad. We know the last character has to be a "}" to match the format of the flags, so we only have 16 possible characters for the second to last. These we can do by hand playing with the URL in your favorite browser.
 
 Flag =
-![flag](img/flag.png)
+![flag](img/CryptoEngine/flag.png)
 
 Now, lets try 0-f in that second to last.
 
 encrypt(flag{deaf983eb34e485ce9d2aff0ae44f850}) =
-![encrypted_flagdeaf983eb34e485ce9d2aff0ae44f850](img/encrypt_deaf983eb34e485ce9d2aff0ae44f850.png)
+![encrypted_flagdeaf983eb34e485ce9d2aff0ae44f850](img/CryptoEngine/encrypt_deaf983eb34e485ce9d2aff0ae44f850.png)
 
 So close! If we try a few more, we cquickly find our answer.
 
 encrypt(flag{deaf983eb34e485ce9d2aff0ae44f852}) =
-![flag](img/flag.png)
+![flag](img/CryptoEngine/flag.png)
