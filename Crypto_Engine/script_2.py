@@ -6,51 +6,37 @@ import pickle
 from PIL import Image
 
 
-base_url = "https://cryptoengine.stillhackinganyway.nl/encrypt?text="
-curr_text = ""
-hashes = {}
+# Load up the hashtable we created.
+with open('hashes.pickle') as f:  # Python 3: open(..., 'rb')
+    hashes = pickle.load(f)[0]
 
-for group in [0,1,2,3,4,5,6,7,8,9,10,11]:
+    # Open out flag image.
+    im = Image.open('flag.png')
+    pix = im.load()
 
-    # Hash map all possibilities
-    for c in string.printable:
-        text = curr_text + urllib.quote_plus(c * 3)
-        url = base_url + text
+    # Set up a variable to hold the flag
+    flag = ""
 
-        print url
-
-        content = urllib2.urlopen(url).read()
-
-        f = open( text + '.png', 'w' )
-        f.write(content)
-        f.close()
-
-        im = Image.open(text + '.png')
-        pix = im.load()
-        x = 3 + (40 * group)
+    # There are 12 squares in the flag so we itterate over each one.
+    for offset in range(12):
+        # Add the square offset (40px is the width) to the x.
+        x = 3 + (offset * 40)
         y = 3
+        # For each R, G and B value of the color...
         for pos in [1, 2, 3]:
 
-            code = c + str(pos)
-            value = str(pix[x,y][pos - 1]) + "-" + str(pos)
+            # Debug print statement
+            #print "RGB for [" + str(x) + ", " + str(y) + "] (Square: " + str(offset + 1) + ")= " + str(pix[x,y])
 
-            print code +  " = " + value
+            # Generate the key from the color value and the string pos
+            key = str(pix[x,y][pos - 1]) + "-" + str(pos)
 
-            hashes[value] = code
+            # Check that we actually have a key so that we don't get an error.
+            # If we have it, print the value, otherwise a "?"
+            if hashes.has_key(key):
+                flag = flag + hashes[key]
+            else:
+                flag = flag + "?"
 
-    # MapRGB value from key to current hashmap
-    im = Image.open("flag.png")
-    pix = im.load()
-    x = 3 + (40 * group)
-    y = 3
-    for pos in [1, 2, 3]:
-        value = str(pix[x,y][pos - 1]) + "-" + str(pos)
-
-        code = hashes[value]
-
-        if hashes.has_key(value):
-            code = hashes[value][:1]
-        else:
-            code = "?"
-        curr_text = curr_text + code
-        print curr_text
+    # Print the final flag
+    print flag
